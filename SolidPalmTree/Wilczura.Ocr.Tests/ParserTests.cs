@@ -201,6 +201,58 @@ public static class ParserTests
             // Assert
             result.Should().Be(expectedResult);
         }
+    }
 
+    public class TheGetCombinationsMethod
+    {
+
+
+        [Fact]
+        public void WhenInputIsSpecified_ThenOutputIsAsExpected()
+        {
+            // Arrange
+            var input = new List<List<int>>
+            {
+                new() { 1, 2, 3},
+                new() { 4, 5, 6},
+                new() { 7, 8, 9},
+            };
+            var expectedResult = new List<List<int>>
+            {
+                new() { 1, 4, 7},
+                new() { 1, 4, 8},
+                new() { 1, 4, 9},
+                new() { 1, 5, 7},
+                new() { 1, 5, 8},
+                new() { 1, 5, 9},
+                new() { 1, 6, 7},
+                new() { 1, 6, 8},
+                new() { 1, 6, 9},
+                new() { 2, 4, 7},
+                new() { 2, 4, 8},
+                new() { 2, 4, 9},
+                new() { 2, 5, 7},
+                new() { 2, 5, 8},
+                new() { 2, 5, 9},
+                new() { 2, 6, 7},
+                new() { 2, 6, 8},
+                new() { 2, 6, 9},
+                new() { 3, 4, 7},
+                new() { 3, 4, 8},
+                new() { 3, 4, 9},
+                new() { 3, 5, 7},
+                new() { 3, 5, 8},
+                new() { 3, 5, 9},
+                new() { 3, 6, 7},
+                new() { 3, 6, 8},
+                new() { 3, 6, 9},
+            };;
+
+            // Act
+            var result = Parser.GetCombinations(input, []);
+
+            // Assert
+            result.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }

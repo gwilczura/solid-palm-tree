@@ -36,16 +36,11 @@ public static class Parser
         var parsedDigits = digits.Select(d => GetExactDigit(d)).ToList();
         if(parsedDigits.Any(a=>!a.HasValue))
         {
-            return FormatNumber(parsedDigits, Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegal);
         }
 
         var isAccountNumber = IsAccountNumber(parsedDigits);
-        return FormatNumber(parsedDigits, isAccountNumber ? string.Empty : Consts.Error);
-    }
-
-    private static string FormatNumber(List<int?> number, string suffix)
-    {
-        return $"{string.Join("", number.Select(d => d.HasValue ? d.ToString() : "?"))} {suffix}".Trim();
+        return parsedDigits.FormatNumber(isAccountNumber ? string.Empty : Consts.Error);
     }
 
     /// <summary>
@@ -59,7 +54,7 @@ public static class Parser
         var parsedDigits = digits.Select(d => GetExactDigit(d)).ToList();
         if (parsedDigits.All(a => a.HasValue) && IsAccountNumber(parsedDigits))
         {
-            return FormatNumber(parsedDigits, string.Empty);
+            return parsedDigits.FormatNumber();
         }
 
         // otherwise look for alternatives
@@ -74,13 +69,43 @@ public static class Parser
         // if some positions have no alternatives
         if(mapped.Any(a=>a.Count == 0))
         {
-            return FormatNumber(parsedDigits, Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegal);
         }
 
         // do Ambiguous
+        var combinations = GetCombinations(mapped, []);
+        var alternativeAccountNumbers = combinations.Where(c => IsAccountNumber(c.Cast<int?>().ToList())).ToList();
+        if(alternativeAccountNumbers.Count == 1)
+        {
+            return alternativeAccountNumbers[0].FormatNumber();
+        }
+        else if(alternativeAccountNumbers.Count > 1) 
+        {
+            var firstPart = parsedDigits.FormatNumber(Consts.Ambiguous);
+            var alternativesPart = string.Join("', '", alternativeAccountNumbers.Select(aan => aan.FormatNumber()).OrderBy(a => a));
+            return $"{firstPart} ['{alternativesPart}']";
+        }
 
+        // if no ambiguity then Error or Illegal
+        return GetParsingResult(entry);
+    }
 
-        // if no Ambiguouity then Error or Illegal
+    public static List<List<int>> GetCombinations(List<List<int>> map, List<List<int>> candidates)
+    {
+        Guard.Against.Null(candidates);
+        Guard.Against.Null(map);
+
+        if(map.Count == 0)
+        {
+            return candidates;
+        }
+
+        var newCandidates = candidates.Count == 0
+            ? map[0].Select(a => new List<int> { a }).ToList()
+            : map[0].SelectMany(a => candidates.Select(c => c.Append(a).ToList())).ToList();
+        var newMap = map.Skip(1).ToList();
+
+        return GetCombinations(newMap, newCandidates);
     }
 
     public static IList<string> ParseEntryToDigits(string entry)
@@ -89,7 +114,7 @@ public static class Parser
 
         var lines = entry.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         Guard.Against.OutOfRange(lines.Length, "Number of lines with text.", 3, 3);
-        List<string> number = new List<string>(9);
+        List<string> number = new(9);
         for (int i = 0; i < 9; i++)
         {
             var offset = i * 3;
@@ -107,7 +132,7 @@ public static class Parser
     {
         Guard.Against.NullOrEmpty(digits);
         Guard.Against.OutOfRange(digits.Count, "Number of digits.", 9, 9);
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new();
         // generate 3 lines
         for (int i = 0; i < 3; i++)
         {
