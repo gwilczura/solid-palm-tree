@@ -61,7 +61,7 @@ public static class ParserTests
         }
     }
 
-    public class TheIsNearMethod
+    public class TheIsNearByOneSignMethod
     {
         [Fact]
         public void WhenIsNear_ThenOutputIsTrue()
@@ -99,6 +99,65 @@ public static class ParserTests
 
             // Act
             var result = Parser.IsNearByOneSign(digitOne, digitTwo);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+    }
+
+    public class TheIsNearByOneDigitMethod
+    {
+        [Fact]
+        public void WhenIsNear_ThenOutputIsTrue()
+        {
+            // Arrange
+            var digitOne = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var digitTwo = new List<int?> { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
+
+            // Act
+            var result = Parser.IsNearByOneDigit(digitOne, digitTwo);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void WhenIsNearWithNull_ThenOutputIsTrue()
+        {
+            // Arrange
+            var digitOne = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var digitTwo = new List<int?> { null, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+            // Act
+            var result = Parser.IsNearByOneDigit(digitOne, digitTwo);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void WhenIsTheSame_ThenOutputIsFalse()
+        {
+            // Arrange
+            var digitOne = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var digitTwo = new List<int?> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+            // Act
+            var result = Parser.IsNearByOneDigit(digitOne, digitTwo);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void WhenIsNotNewarByOneSign_ThenOutputIsFalse()
+        {
+            // Arrange
+            var digitOne = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var digitTwo = new List<int?> { 0, 2, 3, 4, 5, 6, 7, 8, 0 };
+
+            // Act
+            var result = Parser.IsNearByOneDigit(digitOne, digitTwo);
 
             // Assert
             result.Should().BeFalse();

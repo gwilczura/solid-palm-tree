@@ -44,9 +44,62 @@ public static class Parser
     }
 
     /// <summary>
-    /// UseCase 4 - accept potential errors
+    /// UseCase 4 - accept potential single error
     /// </summary>
-    public static string GetParsingResultWithDeviation(string entry)
+    /// <param name="entry"></param>
+    /// <returns></returns>
+    public static string GetParsingResultWithSingleDeviation(string entry)
+    {
+        var digits = ParseEntryToDigits(entry);
+
+        // if exact match is correct
+        var parsedDigits = digits.Select(d => GetExactDigit(d)).ToList();
+        if (parsedDigits.All(a => a.HasValue) && IsAccountNumber(parsedDigits))
+        {
+            return parsedDigits.FormatNumber();
+        }
+
+        // otherwise look for alternatives
+        var mapped = digits.Select(d =>
+        {
+            var digit = GetExactDigit(d);
+            var nearDigits = GetNearDigits(d);
+
+            return (digit.HasValue ? nearDigits.Prepend(digit.Value) : nearDigits).ToList();
+        }).ToList();
+
+        // if some positions have no alternatives
+        if (mapped.Any(a => a.Count == 0))
+        {
+            return parsedDigits.FormatNumber(Consts.Illegal);
+        }
+
+        // do Ambiguous
+        var combinations = GetCombinations(mapped, []);
+        var alternativeAccountNumbers = combinations
+            .Where(c => IsNearByOneDigit(c, parsedDigits))
+            .Where(c => IsAccountNumber(c.Cast<int?>().ToList()))
+            .ToList();
+
+        if (alternativeAccountNumbers.Count == 1)
+        {
+            return alternativeAccountNumbers[0].FormatNumber();
+        }
+        else if (alternativeAccountNumbers.Count > 1)
+        {
+            var firstPart = parsedDigits.FormatNumber(Consts.Ambiguous);
+            var alternativesPart = string.Join("', '", alternativeAccountNumbers.Select(aan => aan.FormatNumber()).OrderBy(a => a));
+            return $"{firstPart} ['{alternativesPart}']";
+        }
+
+        // if no ambiguity then Error or Illegal
+        return GetParsingResult(entry);
+    }
+
+    /// <summary>
+    /// UseCase 4 (incorrect) - accept potential errors (multiple)
+    /// </summary>
+    public static string GetParsingResultWithDeviations(string entry)
     {
         var digits = ParseEntryToDigits(entry);
         
@@ -197,6 +250,29 @@ public static class Parser
             if (originalDigit[i] != otherDigit[i])
             {
                 if(isNear)
+                {
+                    return false;
+                }
+
+                isNear = true;
+            }
+        }
+
+        return isNear;
+    }
+
+    public static bool IsNearByOneDigit(List<int> current, List<int?> other)
+    {
+        Guard.Against.NullOrEmpty(current);
+        Guard.Against.NullOrEmpty(other);
+        Guard.Against.OutOfRange(current.Count, "Current number length.", other.Count, other.Count);
+
+        var isNear = false;
+        for (int i = 0; i < current.Count; i++)
+        {
+            if (current[i] != other[i])
+            {
+                if (isNear)
                 {
                     return false;
                 }
