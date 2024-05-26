@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 
-namespace Wilczura.Ocr.Tests;
+namespace Wilczura.Ocr.Domain.Tests;
 
 public class UseCaseFourTests
 {
@@ -15,7 +15,7 @@ public class UseCaseFourTests
 |_||_||_||_||_||_||_| _|  |
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -32,7 +32,7 @@ public class UseCaseFourTests
 |_||_||_||_||_||_||_||_||_|
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -49,7 +49,7 @@ public class UseCaseFourTests
  _| _| _| _| _| _| _| _| _|
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -66,7 +66,7 @@ public class UseCaseFourTests
 |_||_||_||_||_||_||_||_||_|
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -83,7 +83,7 @@ public class UseCaseFourTests
  _| _| _| _| _| _| _| _| _|
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -100,7 +100,7 @@ public class UseCaseFourTests
   | _||_||_||_|  |  |  | _|
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -117,7 +117,7 @@ public class UseCaseFourTests
   ||_  _|  | _||_|  ||_| _|
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -134,7 +134,7 @@ public class UseCaseFourTests
 |_||_||_||_||_||_||_| _|  |
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);
@@ -151,7 +151,7 @@ public class UseCaseFourTests
   | _||_||_||_|  |  |  | _|
 ";
         // Act
-        var textResult = Parser.GetParsingResultWithSingleDeviation(entry);
+        var textResult = Entry.CreateFromEntryText(entry);
 
         // Assert
         textResult.Should().Be(expextedResult);

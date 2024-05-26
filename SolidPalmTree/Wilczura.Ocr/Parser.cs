@@ -75,6 +75,10 @@ public static class Parser
         }
 
         // do Ambiguous
+
+        // this is suboptimal - we could be checking for "near by one digit"
+        // already during the recursion - this would result in smaller set and less recursive calls
+        // also if parsed result already have more than one "?" then it's impossible to get valid result
         var combinations = GetCombinations(mapped, []);
         var alternativeAccountNumbers = combinations
             .Where(c => IsNearByOneDigit(c, parsedDigits))
@@ -93,6 +97,7 @@ public static class Parser
         }
 
         // if no ambiguity then Error or Illegal
+        // parsing from scratch is also suboptimal
         return GetParsingResult(entry);
     }
 
@@ -171,10 +176,10 @@ public static class Parser
         for (int i = 0; i < 9; i++)
         {
             var offset = i * 3;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(lines[0].Substring(offset, 3));
-            stringBuilder.Append(lines[1].Substring(offset, 3));
-            stringBuilder.Append(lines[2].Substring(offset, 3));
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append(lines[0].AsSpan(offset, 3))
+                .Append(lines[1].AsSpan(offset, 3))
+                .Append(lines[2].AsSpan(offset, 3));
             number.Add(stringBuilder.ToString());
         }
 

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wilczura.Ocr", "Wilczura.Oc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wilczura.Ocr.Tests", "Wilczura.Ocr.Tests\Wilczura.Ocr.Tests.csproj", "{C36252CE-6C3D-47B9-A270-81A7BBA05669}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wilczura.Ocr.Domain", "Wilczura.Ocr.Domain\Wilczura.Ocr.Domain.csproj", "{67F2830F-3B37-4E1B-9D56-75FA1E4E4C3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wilczura.Ocr.Domain.Tests", "Wilczura.Ocr.Domain.Tests\Wilczura.Ocr.Domain.Tests.csproj", "{70A8D072-34BD-443C-9CE8-5145954EE6F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{C36252CE-6C3D-47B9-A270-81A7BBA05669}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C36252CE-6C3D-47B9-A270-81A7BBA05669}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C36252CE-6C3D-47B9-A270-81A7BBA05669}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F2830F-3B37-4E1B-9D56-75FA1E4E4C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F2830F-3B37-4E1B-9D56-75FA1E4E4C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F2830F-3B37-4E1B-9D56-75FA1E4E4C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67F2830F-3B37-4E1B-9D56-75FA1E4E4C3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A8D072-34BD-443C-9CE8-5145954EE6F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A8D072-34BD-443C-9CE8-5145954EE6F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A8D072-34BD-443C-9CE8-5145954EE6F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A8D072-34BD-443C-9CE8-5145954EE6F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
