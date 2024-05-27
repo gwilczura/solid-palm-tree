@@ -2,7 +2,7 @@
 
 public static class Consts
 {
-    public const string Illegal = "ILL";
+    public const string Illegible = "ILL";
     public const string Error = "ERR";
     public const string Ambiguous = "AMB";
 

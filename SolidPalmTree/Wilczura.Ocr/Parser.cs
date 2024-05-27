@@ -36,7 +36,7 @@ public static class Parser
         var parsedDigits = digits.Select(d => GetExactDigit(d)).ToList();
         if(parsedDigits.Any(a=>!a.HasValue))
         {
-            return parsedDigits.FormatNumber(Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegible);
         }
 
         var isAccountNumber = IsAccountNumber(parsedDigits);
@@ -71,10 +71,14 @@ public static class Parser
         // if some positions have no alternatives
         if (mapped.Any(a => a.Count == 0))
         {
-            return parsedDigits.FormatNumber(Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegible);
         }
 
         // do Ambiguous
+
+        // this is suboptimal - we could be checking for "near by one digit"
+        // already during the recursion - this would result in smaller set and less recursive calls
+        // also if parsed result already have more than one "?" then it's impossible to get valid result
         var combinations = GetCombinations(mapped, []);
         var alternativeAccountNumbers = combinations
             .Where(c => IsNearByOneDigit(c, parsedDigits))
@@ -92,7 +96,8 @@ public static class Parser
             return $"{firstPart} ['{alternativesPart}']";
         }
 
-        // if no ambiguity then Error or Illegal
+        // if no ambiguity then Error or Illegible
+        // parsing from scratch is also suboptimal
         return GetParsingResult(entry);
     }
 
@@ -122,7 +127,7 @@ public static class Parser
         // if some positions have no alternatives
         if(mapped.Any(a=>a.Count == 0))
         {
-            return parsedDigits.FormatNumber(Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegible);
         }
 
         // do Ambiguous
@@ -139,7 +144,7 @@ public static class Parser
             return $"{firstPart} ['{alternativesPart}']";
         }
 
-        // if no ambiguity then Error or Illegal
+        // if no ambiguity then Error or Illegible
         return GetParsingResult(entry);
     }
 
@@ -171,10 +176,10 @@ public static class Parser
         for (int i = 0; i < 9; i++)
         {
             var offset = i * 3;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(lines[0].Substring(offset, 3));
-            stringBuilder.Append(lines[1].Substring(offset, 3));
-            stringBuilder.Append(lines[2].Substring(offset, 3));
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append(lines[0].AsSpan(offset, 3))
+                .Append(lines[1].AsSpan(offset, 3))
+                .Append(lines[2].AsSpan(offset, 3));
             number.Add(stringBuilder.ToString());
         }
 

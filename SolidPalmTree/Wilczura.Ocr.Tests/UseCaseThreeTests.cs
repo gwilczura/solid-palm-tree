@@ -23,7 +23,7 @@ public class UseCaseThreeTests
     }
 
     [Fact]
-    public void When49006771Strange_ThenItIsIllegal()
+    public void When49006771Strange_ThenItIsIllegible()
     {
         // Arrange
         var entry = @"
@@ -41,7 +41,7 @@ public class UseCaseThreeTests
     }
 
     [Fact]
-    public void When1234X678X_ThenItIsIllegal()
+    public void When1234X678X_ThenItIsIllegible()
     {
         // Arrange
         var entry = @"
@@ -59,7 +59,7 @@ public class UseCaseThreeTests
     }
 
     [Fact]
-    public void When111111111_ThenItIsIllegal()
+    public void When111111111_ThenItIsIllegible()
     {
         // Arrange
         var entry = @"
