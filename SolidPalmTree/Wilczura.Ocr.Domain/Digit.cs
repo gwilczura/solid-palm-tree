@@ -4,16 +4,16 @@ namespace Wilczura.Ocr.Domain;
 
 internal class Digit
 {
-    internal const string Zero    = " _ | ||_|";
-    internal const string One     = "     |  |";
-    internal const string Two     = " _  _||_ ";
-    internal const string Three   = " _  _| _|";
-    internal const string Four    = "   |_|  |";
-    internal const string Five    = " _ |_  _|";
-    internal const string Six     = " _ |_ |_|";
-    internal const string Seven   = " _   |  |";
-    internal const string Eight   = " _ |_||_|";
-    internal const string Nine    = " _ |_| _|";
+    internal const string Zero = " _ | ||_|";
+    internal const string One = "     |  |";
+    internal const string Two = " _  _||_ ";
+    internal const string Three = " _  _| _|";
+    internal const string Four = "   |_|  |";
+    internal const string Five = " _ |_  _|";
+    internal const string Six = " _ |_ |_|";
+    internal const string Seven = " _   |  |";
+    internal const string Eight = " _ |_||_|";
+    internal const string Nine = " _ |_| _|";
 
     internal static Dictionary<int, string> DigitsMap = new Dictionary<int, string>
     {
@@ -31,18 +31,20 @@ internal class Digit
 
     internal int? DigitNumber { get; init; }
 
-    internal List<int> NearDigitNumbers { get; init; }
-
     private readonly string _digitCode;
 
     internal Digit(string digitCode)
     {
         _digitCode = digitCode;
-        DigitNumber = GetExactDigit();
-        NearDigitNumbers = GetNearDigits();
+        DigitNumber = GetExactDigitNumber();
     }
 
-    internal int? GetExactDigit()
+    public override string ToString()
+    {
+        return DigitNumber.HasValue ? DigitNumber.Value.ToString() : "?";
+    }
+
+    internal int? GetExactDigitNumber()
     {
         int? directMatch = null;
         switch (_digitCode)
@@ -62,22 +64,9 @@ internal class Digit
         return directMatch;
     }
 
-    internal List<int> GetNearDigits()
+    internal List<Digit> GetNearDigits()
     {
-        var digits = new List<int>();
-
-        if (IsNearByOneSign(_digitCode, Digit.Zero)) digits.Add(0);
-        if (IsNearByOneSign(_digitCode, Digit.One)) digits.Add(1);
-        if (IsNearByOneSign(_digitCode, Digit.Two)) digits.Add(2);
-        if (IsNearByOneSign(_digitCode, Digit.Three)) digits.Add(3);
-        if (IsNearByOneSign(_digitCode, Digit.Four)) digits.Add(4);
-        if (IsNearByOneSign(_digitCode, Digit.Five)) digits.Add(5);
-        if (IsNearByOneSign(_digitCode, Digit.Six)) digits.Add(6);
-        if (IsNearByOneSign(_digitCode, Digit.Seven)) digits.Add(7);
-        if (IsNearByOneSign(_digitCode, Digit.Eight)) digits.Add(8);
-        if (IsNearByOneSign(_digitCode, Digit.Nine)) digits.Add(9);
-
-        return digits;
+        return GetNearDigitNumbers().Select(dn => new Digit(DigitsMap[dn])).ToList();
     }
 
     private static bool IsNearByOneSign(string originalDigit, string otherDigit)
@@ -101,5 +90,23 @@ internal class Digit
         }
 
         return isNear;
+    }
+
+    private List<int> GetNearDigitNumbers()
+    {
+        var digits = new List<int>();
+
+        if (IsNearByOneSign(_digitCode, Digit.Zero)) digits.Add(0);
+        if (IsNearByOneSign(_digitCode, Digit.One)) digits.Add(1);
+        if (IsNearByOneSign(_digitCode, Digit.Two)) digits.Add(2);
+        if (IsNearByOneSign(_digitCode, Digit.Three)) digits.Add(3);
+        if (IsNearByOneSign(_digitCode, Digit.Four)) digits.Add(4);
+        if (IsNearByOneSign(_digitCode, Digit.Five)) digits.Add(5);
+        if (IsNearByOneSign(_digitCode, Digit.Six)) digits.Add(6);
+        if (IsNearByOneSign(_digitCode, Digit.Seven)) digits.Add(7);
+        if (IsNearByOneSign(_digitCode, Digit.Eight)) digits.Add(8);
+        if (IsNearByOneSign(_digitCode, Digit.Nine)) digits.Add(9);
+
+        return digits;
     }
 }

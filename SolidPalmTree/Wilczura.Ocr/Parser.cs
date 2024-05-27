@@ -36,7 +36,7 @@ public static class Parser
         var parsedDigits = digits.Select(d => GetExactDigit(d)).ToList();
         if(parsedDigits.Any(a=>!a.HasValue))
         {
-            return parsedDigits.FormatNumber(Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegible);
         }
 
         var isAccountNumber = IsAccountNumber(parsedDigits);
@@ -71,7 +71,7 @@ public static class Parser
         // if some positions have no alternatives
         if (mapped.Any(a => a.Count == 0))
         {
-            return parsedDigits.FormatNumber(Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegible);
         }
 
         // do Ambiguous
@@ -96,7 +96,7 @@ public static class Parser
             return $"{firstPart} ['{alternativesPart}']";
         }
 
-        // if no ambiguity then Error or Illegal
+        // if no ambiguity then Error or Illegible
         // parsing from scratch is also suboptimal
         return GetParsingResult(entry);
     }
@@ -127,7 +127,7 @@ public static class Parser
         // if some positions have no alternatives
         if(mapped.Any(a=>a.Count == 0))
         {
-            return parsedDigits.FormatNumber(Consts.Illegal);
+            return parsedDigits.FormatNumber(Consts.Illegible);
         }
 
         // do Ambiguous
@@ -144,7 +144,7 @@ public static class Parser
             return $"{firstPart} ['{alternativesPart}']";
         }
 
-        // if no ambiguity then Error or Illegal
+        // if no ambiguity then Error or Illegible
         return GetParsingResult(entry);
     }
 
